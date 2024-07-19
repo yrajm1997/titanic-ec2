@@ -71,7 +71,7 @@ def run_training() -> None:
 
     try:
         prod_model_info = client.get_model_version_by_alias(name=model_name, alias="production")         # fetch prod-model info
-        prod_model_version = prod_model_info.version              # prod-model version
+        prod_model_version = int(prod_model_info.version)              # prod-model version
         new_version = prod_model_version + 1                      # new model version
         # Capture the test-accuracy-score of the existing prod-model
         prod_model_run_id = prod_model_info.run_id                   # run_id of the run associated with prod-model
