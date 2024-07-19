@@ -18,13 +18,13 @@ from titanic_model.processing.validation import validate_inputs
 #################### MLflow CODE START to load 'production' model #############################
 import mlflow 
 import mlflow.pyfunc
-mlflow.set_tracking_uri("http://13.201.73.24:5000")
+mlflow.set_tracking_uri(config.app_config.mlflow_tracking_uri)
 
 # Create MLflow client
 client = mlflow.tracking.MlflowClient()
 
 # Load model via 'models'
-model_name = "titanic-rf-model"  #"sklearn-titanic-rf-model"
+model_name = config.app_config.registered_model_name              #"sklearn-titanic-rf-model"
 model_info = client.get_model_version_by_alias(name=model_name, alias="production")
 print(f'Model version fetched: {model_info.version}')
 

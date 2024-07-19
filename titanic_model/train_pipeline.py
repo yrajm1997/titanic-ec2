@@ -22,7 +22,7 @@ def run_training() -> None:
     
     import mlflow
     # Set the tracking URI to the server
-    mlflow.set_tracking_uri("http://13.201.73.24:5000")
+    mlflow.set_tracking_uri(config.app_config.mlflow_tracking_uri)
     # Set an experiment name, unique and case-sensitive
     # It will create a new experiment if the experiment with given doesn't exist
     exp = mlflow.set_experiment(experiment_name = "Titanic-Survival-Pred")
@@ -66,7 +66,7 @@ def run_training() -> None:
     
     # Load current 'production' model via 'models'
     import mlflow.pyfunc
-    model_name = "titanic-rf-model"  #"sklearn-titanic-rf-model"
+    model_name = config.app_config.registered_model_name         #"sklearn-titanic-rf-model"
     client = mlflow.tracking.MlflowClient()
 
     try:

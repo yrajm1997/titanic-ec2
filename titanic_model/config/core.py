@@ -31,6 +31,8 @@ class AppConfig(BaseModel):
     training_data_file: str
     test_data_file: str
     pipeline_save_file: str
+    registered_model_name: str
+    mlflow_tracking_uri: str
 
 
 class ModelConfig(BaseModel):
