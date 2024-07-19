@@ -66,7 +66,7 @@ def run_training() -> None:
     
     # Load current 'production' model via 'models'
     import mlflow.pyfunc
-    model_name = "sklearn-titanic-rf-model"
+    model_name = "titanic-rf-model"  #"sklearn-titanic-rf-model"
     client = mlflow.tracking.MlflowClient()
 
     try:
@@ -78,7 +78,7 @@ def run_training() -> None:
         prod_run = client.get_run(run_id=prod_model_run_id)          # get run info using run_id
         prod_accuracy = prod_run.data.metrics['testing_accuracy']    # get metrics values
     except Exception as e:
-        #print(e)
+        print(e)
         new_version = 1
 
 
