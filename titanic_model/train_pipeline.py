@@ -119,3 +119,4 @@ if __name__ == "__main__":
     if os.environ['RE_TRAIN']:    
         run_training()
         
+        
