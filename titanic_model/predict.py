@@ -18,6 +18,7 @@ from titanic_model.processing.validation import validate_inputs
 #################### MLflow CODE START to load 'production' model #############################
 import mlflow 
 import mlflow.pyfunc
+mlflow.set_tracking_uri("http://192.168.43.86:5000")
 
 # Create MLflow client
 client = mlflow.tracking.MlflowClient()

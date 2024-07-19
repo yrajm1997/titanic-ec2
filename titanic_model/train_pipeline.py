@@ -97,9 +97,10 @@ def run_training() -> None:
     
 
 if __name__ == "__main__":
-    print("Re-training:", os.environ['RE_TRAIN'])
-    if os.environ['RE_TRAIN']:
-        
+    #print("Re-training:", os.environ['RE_TRAIN'])
+    #if os.environ['RE_TRAIN']:
+    print("Re-training")
+    if True:    
         import mlflow
         # Set the tracking URI to the server
         mlflow.set_tracking_uri("http://192.168.43.86:5000")
