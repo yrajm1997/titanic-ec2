@@ -20,7 +20,7 @@ jobs:
       run: pip install -r requirements/requirements.txt
     - name: Train and save pipeline
       env:
-        RE_TRAIN: True
+        RE_TRAIN: False
         #MLFLOW_TRACKING_URI: http://13.201.73.24:5000/
         #MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
         #MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
