@@ -68,6 +68,7 @@ def run_training() -> None:
     client = mlflow.tracking.MlflowClient()
 
     try:
+        print(qwerty)
         prod_model_info = client.get_model_version_by_alias(model_name, "production")         # fetch prod-model info
         prod_model_version = prod_model_info.version              # prod-model version
         new_version = prod_model_version + 1                      # new model version
