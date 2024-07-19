@@ -21,7 +21,7 @@ jobs:
     - name: Train and save pipeline
       env:
         RE_TRAIN: True
-        MLFLOW_TRACKING_URI: http://192.168.43.86:5000/
+        MLFLOW_TRACKING_URI: http://192.168.43.86:5000
         #MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
         #MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
         # GIT_COMMIT_MSG: ${{ github.event.head_commit.message }}
