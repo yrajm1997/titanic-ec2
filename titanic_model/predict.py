@@ -15,9 +15,24 @@ from titanic_model.processing.data_manager import load_pipeline
 from titanic_model.processing.data_manager import pre_pipeline_preparation
 from titanic_model.processing.validation import validate_inputs
 
+#################### MLflow CODE START to load 'production' model #############################
+import mlflow 
+import mlflow.pyfunc
 
-pipeline_file_name = f"{config.app_config.pipeline_save_file}{_version}.pkl"
-titanic_pipe= load_pipeline(file_name=pipeline_file_name)
+# Create MLflow client
+client = mlflow.tracking.MlflowClient()
+
+# Load model via 'models'
+model_name = "sklearn-titanic-rf-model"
+model_info = client.get_model_version_by_alias(model_name, "production")
+print(f'Model version fetched: {model_info.version}')
+
+titanic_pipe = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@production")
+#################### MLflow CODE END ##########################################################
+
+
+#pipeline_file_name = f"{config.app_config.pipeline_save_file}{_version}.pkl"
+#titanic_pipe = load_pipeline(file_name=pipeline_file_name)
 
 
 def make_prediction(*,input_data:Union[pd.DataFrame, dict]) -> dict:

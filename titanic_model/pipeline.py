@@ -29,7 +29,9 @@ titanic_pipe=Pipeline([
      ),
     # scale
      ("scaler", StandardScaler()),
-     ('model_rf', RandomForestClassifier(n_estimators=config.model_config.n_estimators, max_depth=config.model_config.max_depth,
-                                      random_state=config.model_config.random_state))
+     ('model_rf', RandomForestClassifier(n_estimators=config.model_config.n_estimators, 
+                                         max_depth=config.model_config.max_depth, 
+                                         max_features=config.model_config.max_features,
+                                         random_state=config.model_config.random_state))
           
      ])

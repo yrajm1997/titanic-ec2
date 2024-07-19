@@ -54,6 +54,7 @@ class ModelConfig(BaseModel):
     random_state: int
     n_estimators: int
     max_depth: int
+    max_features: int
 
 
 class Config(BaseModel):
