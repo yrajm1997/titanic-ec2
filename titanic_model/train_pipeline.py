@@ -13,8 +13,6 @@ from titanic_model.config.core import config
 from titanic_model.pipeline import titanic_pipe
 from titanic_model.processing.data_manager import load_dataset, save_pipeline
 
-import mlflow
-
 
 def run_training() -> None:
     
@@ -22,6 +20,7 @@ def run_training() -> None:
     Train the model.
     """
 
+    import mlflow
     # Set an experiment name, unique and case-sensitive
     # It will create a new experiment if the experiment with given doesn't exist
     exp = mlflow.set_experiment(experiment_name = "Titanic-Survival-Pred")
