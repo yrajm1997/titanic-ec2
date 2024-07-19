@@ -103,7 +103,7 @@ if __name__ == "__main__":
     if True:    
         import mlflow
         # Set the tracking URI to the server
-        mlflow.set_tracking_uri("http://192.168.43.86:5000")
+        mlflow.set_tracking_uri("http://13.201.73.24:5000")
         # Set an experiment name, unique and case-sensitive
         # It will create a new experiment if the experiment with given doesn't exist
         exp = mlflow.set_experiment(experiment_name = "Titanic-Survival-Pred")
