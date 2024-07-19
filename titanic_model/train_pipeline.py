@@ -70,7 +70,7 @@ def run_training() -> None:
     client = mlflow.tracking.MlflowClient()
 
     try:
-        prod_model_info = client.get_model_version_by_alias(model_name, "production")         # fetch prod-model info
+        prod_model_info = client.get_model_version_by_alias(name=model_name, alias="production")         # fetch prod-model info
         prod_model_version = prod_model_info.version              # prod-model version
         new_version = prod_model_version + 1                      # new model version
         # Capture the test-accuracy-score of the existing prod-model
@@ -103,7 +103,7 @@ def run_training() -> None:
                                 registered_model_name=model_name,
                                 )
         # Set new model version alias to 'production'
-        client.set_registered_model_alias(model_name, "production", new_version)
+        client.set_registered_model_alias(name=model_name, alias="production", version=str(new_version))
         
     else:
         # Do not register new version of model but log it as an artifact in this run

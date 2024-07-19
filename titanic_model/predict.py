@@ -25,7 +25,7 @@ client = mlflow.tracking.MlflowClient()
 
 # Load model via 'models'
 model_name = "sklearn-titanic-rf-model"
-model_info = client.get_model_version_by_alias(model_name, "production")
+model_info = client.get_model_version_by_alias(name=model_name, alias="production")
 print(f'Model version fetched: {model_info.version}')
 
 titanic_pipe = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@production")
