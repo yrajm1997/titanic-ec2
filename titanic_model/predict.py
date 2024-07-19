@@ -31,7 +31,6 @@ print(f'Model version fetched: {model_info.version}')
 titanic_pipe = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@production")
 #################### MLflow CODE END ##########################################################
 
-
 #pipeline_file_name = f"{config.app_config.pipeline_save_file}{_version}.pkl"
 #titanic_pipe = load_pipeline(file_name=pipeline_file_name)
 
