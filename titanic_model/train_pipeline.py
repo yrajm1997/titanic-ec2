@@ -20,6 +20,23 @@ def run_training() -> None:
     Train the model.
     """
     
+    import mlflow
+    # Set the tracking URI to the server
+    mlflow.set_tracking_uri("http://13.201.73.24:5000")
+    # Set an experiment name, unique and case-sensitive
+    # It will create a new experiment if the experiment with given doesn't exist
+    exp = mlflow.set_experiment(experiment_name = "Titanic-Survival-Pred")
+
+    # Start RUN
+    mlflow.start_run(experiment_id= exp.experiment_id)        # experiment id under which to create the current run
+    
+    # Log parameters
+    mlflow.log_param("n_estimators", config.model_config.n_estimators)
+    mlflow.log_param("max_depth", config.model_config.max_depth)
+    mlflow.log_param("max_features", config.model_config.max_features)
+    mlflow.log_param("random_state", config.model_config.random_state)
+    
+    
     # read training data
     data = load_dataset(file_name=config.app_config.training_data_file)
 
@@ -53,7 +70,6 @@ def run_training() -> None:
     client = mlflow.tracking.MlflowClient()
 
     try:
-        print(qwerty)
         prod_model_info = client.get_model_version_by_alias(model_name, "production")         # fetch prod-model info
         prod_model_version = prod_model_info.version              # prod-model version
         new_version = prod_model_version + 1                      # new model version
@@ -93,32 +109,13 @@ def run_training() -> None:
         # Do not register new version of model but log it as an artifact in this run
         mlflow.sklearn.log_model(sk_model = titanic_pipe, 
                                 artifact_path= "trained_model")
-
+    
+    # End an active MLflow run
+    mlflow.end_run()
     
 
 if __name__ == "__main__":
-    #print("Re-training:", os.environ['RE_TRAIN'])
-    #if os.environ['RE_TRAIN']:
-    print("Re-training")
-    if True:    
-        import mlflow
-        # Set the tracking URI to the server
-        mlflow.set_tracking_uri("http://13.201.73.24:5000")
-        # Set an experiment name, unique and case-sensitive
-        # It will create a new experiment if the experiment with given doesn't exist
-        exp = mlflow.set_experiment(experiment_name = "Titanic-Survival-Pred")
-
-        # Start RUN
-        mlflow.start_run(experiment_id= exp.experiment_id)        # experiment id under which to create the current run
-        
-        # Log parameters
-        mlflow.log_param("n_estimators", config.model_config.n_estimators)
-        mlflow.log_param("max_depth", config.model_config.max_depth)
-        mlflow.log_param("max_features", config.model_config.max_features)
-        mlflow.log_param("random_state", config.model_config.random_state)
-        
+    print("Re-training:", os.environ['RE_TRAIN'])
+    if os.environ['RE_TRAIN']:    
         run_training()
-        
-        # End an active MLflow run
-        mlflow.end_run()
         
