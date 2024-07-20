@@ -69,4 +69,4 @@ max_features: 3
 
 # mlflow tracking uri
 registered_model_name: sklearn-titanic-rf-model
-mlflow_tracking_uri: "http://13.201.73.24:5000/"
+mlflow_tracking_uri: "http://52.66.239.214:5000/"

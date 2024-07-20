@@ -20,7 +20,7 @@ jobs:
       run: pip install -r requirements/requirements.txt
     - name: Train and save pipeline
       env:
-        RE_TRAIN: False
+        RE_TRAIN: True
         #MLFLOW_TRACKING_URI: http://13.201.73.24:5000/
         #MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
         #MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
@@ -49,63 +49,63 @@ jobs:
 #        path: titanic_model/trained_models
     - name: Install dependencies
       run: pip install -r requirements/test_requirements.txt
-    - name: Test with pytest00
+    - name: Test with pytest
       #env:
       #  MLFLOW_TRACKING_URI: http://13.201.73.24:5000/
       run: pytest
 
-  build:
-    needs: [train, test]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    #- uses: actions/download-artifact@v2
-    #  with:
-    #    name: my-trained-pipeline
-    #    path: titanic_model/trained_models
-    - name: Install dependencies
-      run: pip install --upgrade build
-    - name: Build package
-      run: python -m build
-    - uses: actions/upload-artifact@v2
-      with:
-        name: my-build-package
-        path: dist/*.whl
-        retention-days: 1
+  # build:
+  #   needs: [train, test]
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Set up Python 3.10
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: '3.10'
+  #   #- uses: actions/download-artifact@v2
+  #   #  with:
+  #   #    name: my-trained-pipeline
+  #   #    path: titanic_model/trained_models
+  #   - name: Install dependencies
+  #     run: pip install --upgrade build
+  #   - name: Build package
+  #     run: python -m build
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: my-build-package
+  #       path: dist/*.whl
+  #       retention-days: 1
 
-  push-image:
-    needs: [train, test, build]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Repo Checkout
-      uses: actions/checkout@v3
+  # push-image:
+  #   needs: [train, test, build]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Repo Checkout
+  #     uses: actions/checkout@v3
 
-    - uses: actions/download-artifact@v2
-      with:
-        name: my-build-package
-        path: titanic_model_api
+  #   - uses: actions/download-artifact@v2
+  #     with:
+  #       name: my-build-package
+  #       path: titanic_model_api
 
-    - name: Login to Docker hub
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS_TOKEN }}
-      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+  #   - name: Login to Docker hub
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
+  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS_TOKEN }}
+  #     run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
 
-    - name: Build the Docker image for Fastapi app
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-      run: docker build . -f Dockerfile -t $DOCKER_USER/titanic-fastapi-mlflow:latest
+  #   - name: Build the Docker image for Fastapi app
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
+  #     run: docker build . -f Dockerfile -t $DOCKER_USER/titanic-fastapi-mlflow:latest
 
-    - name: Push the Docker Image
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-      run: docker push $DOCKER_USER/titanic-fastapi-mlflow
+  #   - name: Push the Docker Image
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
+  #     run: docker push $DOCKER_USER/titanic-fastapi-mlflow
 
-    - name: Logout to Docker hub
-      run: docker logout
+  #   - name: Logout to Docker hub
+  #     run: docker logout
