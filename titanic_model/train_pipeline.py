@@ -76,8 +76,8 @@ def run_training() -> None:
         prod_run = client.get_run(run_id=prod_model_run_id)          # get run info using run_id
         prod_accuracy = prod_run.data.metrics['testing_accuracy']    # get metrics values
 
-        # Capture the version of the latest trained model
-        latest_model_info = client.get_model_version_by_alias(name=model_name, alias="latest")           # fetch latest-model info
+        # Capture the version of the last-trained model
+        latest_model_info = client.get_model_version_by_alias(name=model_name, alias="last-trained")           # fetch latest-model info
         latest_model_version = int(latest_model_info.version)              # latest-model version
         new_version = latest_model_version + 1                      # new model version
 
@@ -105,8 +105,8 @@ def run_training() -> None:
                             artifact_path="trained_model",
                             registered_model_name=model_name,
                             )
-    # Add 'latest' alias to this new model version
-    client.set_registered_model_alias(name=model_name, alias="latest", version=str(new_version))
+    # Add 'last-trained' alias to this new model version
+    client.set_registered_model_alias(name=model_name, alias="last-trained", version=str(new_version))
 
 
     if first_model or better_model:
