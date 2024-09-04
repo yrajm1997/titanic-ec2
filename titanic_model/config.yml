@@ -63,9 +63,9 @@ test_size: 0.20
 # to set the random seed
 random_state: 42
 # alogrithm parameters
-n_estimators: 200
-max_depth: 7
-max_features: 4
+n_estimators: 250
+max_depth: 9
+max_features: 5
 
 # mlflow tracking uri
 registered_model_name: sklearn-titanic-rf-model
