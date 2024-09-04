@@ -69,4 +69,4 @@ max_features: 4
 
 # mlflow tracking uri
 registered_model_name: sklearn-titanic-rf-model
-mlflow_tracking_uri: https://obscure-broccoli-49v9rpvx56q3q47p-5000.app.github.dev/
+mlflow_tracking_uri: https://humble-giggle-gwrwpvrgvg9cv97-5000.app.github.dev/

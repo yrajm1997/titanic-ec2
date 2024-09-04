@@ -70,45 +70,52 @@ def run_training() -> None:
     client = mlflow.tracking.MlflowClient()
 
     try:
-        prod_model_info = client.get_model_version_by_alias(name=model_name, alias="production")         # fetch prod-model info
-        prod_model_version = int(prod_model_info.version)              # prod-model version
-        new_version = prod_model_version + 1                      # new model version
         # Capture the test-accuracy-score of the existing prod-model
+        prod_model_info = client.get_model_version_by_alias(name=model_name, alias="production")         # fetch prod-model info
         prod_model_run_id = prod_model_info.run_id                   # run_id of the run associated with prod-model
         prod_run = client.get_run(run_id=prod_model_run_id)          # get run info using run_id
         prod_accuracy = prod_run.data.metrics['testing_accuracy']    # get metrics values
+
+        # Capture the version of the latest trained model
+        latest_model_info = client.get_model_version_by_alias(name=model_name, alias="latest")           # fetch latest-model info
+        latest_model_version = int(latest_model_info.version)              # latest-model version
+        new_version = latest_model_version + 1                      # new model version
+
     except Exception as e:
         print(e)
         new_version = 1
 
 
-    # Log trained model
+    # Criterion to Log trained model
     if new_version > 1:
         if prod_accuracy < testing_accuracy:
-            print("Trained model is better than the existing model in production, registering its new version!")
-            register_model = True
+            print("Trained model is better than the existing model in production, will use this model in production!")
+            better_model = True
         else:
             print("Trained model is not better than the existing model in production!")
-            register_model = False
-
+            better_model = False
+        first_model = False
     else:
         print("No existing model in production, registering a new model!")
-        register_model = True
+        first_model = True
+
+    
+    # Register new model/version of model
+    mlflow.sklearn.log_model(sk_model = titanic_pipe, 
+                            artifact_path="trained_model",
+                            registered_model_name=model_name,
+                            )
+    # Add 'latest' alias to this new model version
+    client.set_registered_model_alias(name=model_name, alias="latest", version=str(new_version))
 
 
-    if register_model:
-        # Register new model/version of model
-        mlflow.sklearn.log_model(sk_model = titanic_pipe, 
-                                artifact_path="trained_model",
-                                registered_model_name=model_name,
-                                )
-        # Set new model version alias to 'production'
+    if first_model or better_model:
+        # Promote the model to production by adding 'production' alias to this new model version
         client.set_registered_model_alias(name=model_name, alias="production", version=str(new_version))
-        
     else:
-        # Do not register new version of model but log it as an artifact in this run
-        mlflow.sklearn.log_model(sk_model = titanic_pipe, 
-                                artifact_path= "trained_model")
+        # Don't promote this new model version
+        pass
+
     
     # End an active MLflow run
     mlflow.end_run()

@@ -28,7 +28,7 @@ model_name = config.app_config.registered_model_name              #"sklearn-tita
 model_info = client.get_model_version_by_alias(name=model_name, alias="production")
 print(f'Model version fetched: {model_info.version}')
 
-titanic_pipe = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@production")
+titanic_pipe = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@best")
 #################### MLflow CODE END ##########################################################
 
 #pipeline_file_name = f"{config.app_config.pipeline_save_file}{_version}.pkl"
